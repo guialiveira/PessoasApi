@@ -29,7 +29,7 @@ namespace GlobalPessoas.Controllers
         }
 
         // GET: api/Pessoas/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Pessoa>> GetPessoa(int id)
         {
             var pessoa = await _context.Pessoa.FindAsync(id);
@@ -42,7 +42,7 @@ namespace GlobalPessoas.Controllers
             return pessoa;
         }
 
-        // GET: api/Pessoas/byName?uf=GO
+        // GET: api/Pessoas/ByUf?uf=GO
         [HttpGet("{ByUf}")]
         public async Task<ActionResult<IEnumerable<Pessoa>>> GetByUf(string uf) 
         {
