@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GlobalPessoas.Data;
 using GlobalPessoas.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GlobalPessoas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PessoasController : ControllerBase
     {
         private readonly GlobalPessoasContext _context;
@@ -36,7 +36,7 @@ namespace GlobalPessoas.Controllers
 
             if (pessoa == null)
             {
-                return NotFound("A Pessoa não foi encontrada");
+                return NotFound("A pessoa não foi encontrada");
             }
 
             return pessoa;
@@ -55,11 +55,11 @@ namespace GlobalPessoas.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPessoa(int id, Pessoa pessoa)
+        public async Task<ActionResult<Pessoa>> PutPessoa(int id, Pessoa pessoa)
         {
             if (id != pessoa.Id)
             {
-                return BadRequest();
+                return BadRequest("O Id passado não é o mesmo Id do objeto passado");
             }
 
             _context.Entry(pessoa).State = EntityState.Modified;
@@ -67,20 +67,19 @@ namespace GlobalPessoas.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return pessoa;
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!PessoaExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Essa pessoa não existe");
                 }
                 else
                 {
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Pessoas
@@ -102,7 +101,7 @@ namespace GlobalPessoas.Controllers
             var pessoa = await _context.Pessoa.FindAsync(id);
             if (pessoa == null)
             {
-                return NotFound();
+                return NotFound("Essa pessoa já não existe");
             }
 
             _context.Pessoa.Remove(pessoa);

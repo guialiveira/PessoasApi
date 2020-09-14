@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using GlobalPessoas.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace GlobalPessoas.Data
 {
-    public class GlobalPessoasContext : DbContext
+    public class GlobalPessoasContext : IdentityDbContext
     {
         public GlobalPessoasContext (DbContextOptions<GlobalPessoasContext> options)
             : base(options)
